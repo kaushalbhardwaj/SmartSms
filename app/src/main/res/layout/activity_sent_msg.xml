@@ -1,18 +1,18 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:id="@+id/mainpagecl"
+    android:id="@+id/sentcl"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:id="@+id/ll_weekafter"
+        android:id="@+id/ll_sent"
         android:orientation="vertical">
 
         <include
-            android:id="@+id/toolbar_mainpage"
+            android:id="@+id/toolbar_sent"
             layout="@layout/toolbar" />
 
     </LinearLayout>
@@ -26,22 +26,9 @@
         <ListView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/listView1"
+            android:id="@+id/listView_sent"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true" />
-
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/newmsg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:src="@drawable/ic_mode_edit_white_24dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="16dp"
-            android:layout_marginRight="16dp"
-            android:adjustViewBounds="false" />
     </RelativeLayout>
 
 

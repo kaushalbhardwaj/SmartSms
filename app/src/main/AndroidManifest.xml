@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
     <application
         android:allowBackup="true"
@@ -19,7 +20,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainPage" />
-        <activity android:name=".NewMsg"></activity>
+        <activity android:name=".NewMsg" />
+        <activity android:name=".SentMsg" />
+        <activity android:name=".DraftMsg"></activity>
     </application>
 
 </manifest>

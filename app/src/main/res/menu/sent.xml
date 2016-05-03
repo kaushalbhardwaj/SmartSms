@@ -2,17 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/num"
+    <item android:id="@+id/numsent"
         android:title="num"
         android:visible="false"
         app:showAsAction="always"
         />
 
-    <item android:id="@+id/sent"
-        android:title="Sent"
-        />
 
-    <item android:id="@+id/draft"
-        android:title="Draft"
-        />
 </menu>
