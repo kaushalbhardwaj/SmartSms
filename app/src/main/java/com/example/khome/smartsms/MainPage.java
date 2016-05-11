@@ -13,15 +13,20 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -36,13 +41,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class MainPage extends AppCompatActivity {
+public class MainPage extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     private Toolbar mToolbar;
     FloatingActionButton newmsg;
     CoordinatorLayout cl;
     ListView lv1;
     List<SMSData> smsList;
+    MySimpleArrayAdapter adapter;
 
     int totalSMS=-1;
     LinkedHashMap<String,ArrayList<SMSData>> smsMap;
@@ -94,7 +100,7 @@ public class MainPage extends AppCompatActivity {
             if(smsList!=null)
             {
                 List<Map.Entry<String, ArrayList<SMSData>>> list = new ArrayList(smsMap.entrySet());
-                MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(getApplicationContext(), list);
+                adapter = new MySimpleArrayAdapter(getApplicationContext(), list);
                 lv1.setAdapter(adapter);
 
             }
@@ -111,6 +117,7 @@ public class MainPage extends AppCompatActivity {
             lv1.setAdapter(adapter);
 
         }*/
+
 
 
 
@@ -148,6 +155,7 @@ public class MainPage extends AppCompatActivity {
 
 
 
+
     }
 
     @Override
@@ -163,7 +171,7 @@ public class MainPage extends AppCompatActivity {
                     if(smsList!=null)
                     {
                         List<Map.Entry<String, ArrayList<SMSData>>> list = new ArrayList(smsMap.entrySet());
-                        MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(getApplicationContext(), list);
+                        adapter = new MySimpleArrayAdapter(getApplicationContext(), list);
                         lv1.setAdapter(adapter);
 
                     }
@@ -182,6 +190,22 @@ public class MainPage extends AppCompatActivity {
             // other 'case' lines to check for other
             // permissions this app might request
         }
+    }
+
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        // User pressed the search button
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+
+        MainPage.this.adapter.getFilter().filter(newText);
+
+        // User changed the text
+        return false;
     }
 
     public List<SMSData> getAllSms() {
@@ -243,6 +267,10 @@ public class MainPage extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menuitem, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(this);
         if(totalSMS!=-1)
         {
 
