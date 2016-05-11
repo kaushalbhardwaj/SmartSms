@@ -2,6 +2,7 @@ package com.example.khome.smartsms;
 
 import android.Manifest;
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -20,7 +21,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DraftMsg extends AppCompatActivity implements SimpleGestureFilter.SimpleGestureListener {
 
@@ -30,6 +33,7 @@ public class DraftMsg extends AppCompatActivity implements SimpleGestureFilter.S
     List<SMSData> smsList;
     Menu menu1;
     int totalSMS=-1;
+    LinkedHashMap<String,ArrayList<SMSData>> smsMap;
 
     ListView lv1;
     @Override
@@ -40,6 +44,7 @@ public class DraftMsg extends AppCompatActivity implements SimpleGestureFilter.S
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Draft");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        smsMap=new LinkedHashMap<String,ArrayList<SMSData>>();
 
         detector = new SimpleGestureFilter(this,this);
 
@@ -64,7 +69,8 @@ public class DraftMsg extends AppCompatActivity implements SimpleGestureFilter.S
             smsList=getAllSms();
             if(smsList!=null)
             {
-                MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(getApplicationContext(), smsList);
+                List<Map.Entry<String, ArrayList<SMSData>>> list = new ArrayList(smsMap.entrySet());
+                MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(getApplicationContext(), list);
                 lv1.setAdapter(adapter);
 
             }
@@ -75,6 +81,23 @@ public class DraftMsg extends AppCompatActivity implements SimpleGestureFilter.S
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 
+                List<Map.Entry<String, ArrayList<SMSData>>> list = new ArrayList(smsMap.entrySet());
+
+
+                Map.Entry<String, ArrayList<SMSData>> entry = (Map.Entry<String, ArrayList<SMSData>>) list.get(position);
+                ArrayList<SMSData> sms=entry.getValue();
+                ArrayList<SMSDataSer> myList = new ArrayList<SMSDataSer>();
+
+                for(int j=0;j<sms.size();j++)
+                {
+                    SMSData sms1=sms.get(j);
+                    SMSDataSer s=new SMSDataSer(sms1);
+                    myList.add(s);
+                }
+                Intent i=new Intent(DraftMsg.this,BundleMsg.class);
+                i.putExtra("mylist", myList);
+                i.putExtra("key",entry.getKey());
+                startActivityForResult(i,4);
 
 
             }
@@ -106,7 +129,8 @@ public class DraftMsg extends AppCompatActivity implements SimpleGestureFilter.S
                     smsList= getAllSms();
                     if(smsList!=null)
                     {
-                        MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(getApplicationContext(), smsList);
+                        List<Map.Entry<String, ArrayList<SMSData>>> list = new ArrayList(smsMap.entrySet());
+                        MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(getApplicationContext(), list);
                         lv1.setAdapter(adapter);
 
                     }
@@ -149,6 +173,19 @@ public class DraftMsg extends AppCompatActivity implements SimpleGestureFilter.S
                 objSms.setDate(c.getString(c.getColumnIndexOrThrow("date")));
 
                 lstSms.add(objSms);
+                ArrayList<SMSData> i1=smsMap.get(objSms.getNumber());
+                if(i1==null)
+                {
+                    i1=new ArrayList<SMSData>();
+                    i1.add(objSms);
+
+                }
+                else
+                {
+                    i1.add(objSms);
+
+                }
+                smsMap.put(objSms.getNumber(), i1);
                 c.moveToNext();
             }
         }

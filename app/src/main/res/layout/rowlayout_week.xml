@@ -15,12 +15,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="phonenumber"
+            android:textSize="15dp"
             android:id="@+id/phonenum"
             android:textColor="#070707"
             android:textStyle="bold"
             android:layout_marginTop="5dp"
 
-            android:layout_marginLeft="20dp"/>
+            android:layout_marginLeft="70dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -34,15 +35,37 @@
             android:layout_alignTop="@+id/phonenum"
             android:layout_alignParentEnd="true" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Num"
+            android:textStyle="bold"
+            android:textColor="#070707"
+            android:id="@+id/num"
+            android:layout_marginStart="24dp"
+            android:layout_alignTop="@+id/phonenum"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/phonenum" />
+
+        <ImageView
+            android:layout_width="60dp"
+            android:src="@drawable/ic_account_box_black_24dp1"
+            android:layout_height="60dp"
+            android:id="@+id/imageView3" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#070707"
+            android:text="msg"
+            android:textSize="15dp"
+            android:id="@+id/msglabel"
+            android:layout_marginLeft="0dp"
+            android:layout_below="@+id/phonenum"
+            android:layout_alignStart="@+id/phonenum"
+            android:layout_marginTop="10dp" />
+
 
     </RelativeLayout>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#070707"
-        android:text="msg"
-        android:textSize="15dp"
-        android:id="@+id/msglabel"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp" />
+
 </LinearLayout>

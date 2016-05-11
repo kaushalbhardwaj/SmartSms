@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -22,7 +23,27 @@
         <activity android:name=".MainPage" />
         <activity android:name=".NewMsg" />
         <activity android:name=".SentMsg" />
-        <activity android:name=".DraftMsg"></activity>
+        <activity android:name=".DraftMsg" />
+        <activity android:name=".BundleMsg" />
+
+        <receiver
+            android:name=".SmsReceiver"
+            android:exported="true">
+            <intent-filter android:priority="999">
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <activity android:name=".BackupDrive" />
+
+        <service
+            android:name=".BackupService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

@@ -15,4 +15,7 @@
     <item android:id="@+id/draft"
         android:title="Draft"
         />
+    <item android:id="@+id/backup"
+        android:title="Backup Msg"
+        />
 </menu>

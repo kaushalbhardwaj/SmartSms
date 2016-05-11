@@ -25,8 +25,16 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.drive.DriveId;
+
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class MainPage extends AppCompatActivity {
 
@@ -37,6 +45,7 @@ public class MainPage extends AppCompatActivity {
     List<SMSData> smsList;
 
     int totalSMS=-1;
+    LinkedHashMap<String,ArrayList<SMSData>> smsMap;
 
 
 
@@ -45,6 +54,7 @@ public class MainPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
         cl=(CoordinatorLayout)findViewById(R.id.mainpagecl);
+        smsMap=new LinkedHashMap<String,ArrayList<SMSData>>();
 
         newmsg=(FloatingActionButton)findViewById(R.id.newmsg);
 
@@ -83,7 +93,8 @@ public class MainPage extends AppCompatActivity {
             smsList=getAllSms();
             if(smsList!=null)
             {
-                MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(getApplicationContext(), smsList);
+                List<Map.Entry<String, ArrayList<SMSData>>> list = new ArrayList(smsMap.entrySet());
+                MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(getApplicationContext(), list);
                 lv1.setAdapter(adapter);
 
             }
@@ -107,8 +118,30 @@ public class MainPage extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                List<Map.Entry<String, ArrayList<SMSData>>> list = new ArrayList(smsMap.entrySet());
 
 
+                Map.Entry<String, ArrayList<SMSData>> entry = (Map.Entry<String, ArrayList<SMSData>>) list.get(position);
+                ArrayList<SMSData> sms=entry.getValue();
+                ArrayList<SMSDataSer> myList = new ArrayList<SMSDataSer>();
+
+                for(int j=0;j<sms.size();j++)
+                {
+                    SMSData sms1=sms.get(j);
+                    SMSDataSer s=new SMSDataSer(sms1);
+                    myList.add(s);
+                }
+                Intent i=new Intent(MainPage.this,BundleMsg.class);
+                i.putExtra("mylist", myList);
+                i.putExtra("key",entry.getKey());
+                startActivityForResult(i,4);
+
+
+                /*String num1=sms.size()+"";
+                String phonenum=entry.getKey();
+                SMSData s2=sms.get(0);
+                String smsBody=s2.getBody();*/
+                //System.out.println(num1+"  "+phonenum+" "+smsBody);
 
             }
         });
@@ -129,7 +162,8 @@ public class MainPage extends AppCompatActivity {
                    smsList= getAllSms();
                     if(smsList!=null)
                     {
-                        MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(getApplicationContext(), smsList);
+                        List<Map.Entry<String, ArrayList<SMSData>>> list = new ArrayList(smsMap.entrySet());
+                        MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(getApplicationContext(), list);
                         lv1.setAdapter(adapter);
 
                     }
@@ -172,11 +206,33 @@ public class MainPage extends AppCompatActivity {
                 objSms.setDate(c.getString(c.getColumnIndexOrThrow("date")));
 
                 lstSms.add(objSms);
+                ArrayList<SMSData> i1=smsMap.get(objSms.getNumber());
+                if(i1==null)
+                {
+                    i1=new ArrayList<SMSData>();
+                    i1.add(objSms);
+
+                }
+                else
+                {
+                    i1.add(objSms);
+
+                }
+                smsMap.put(objSms.getNumber(),i1);
                 c.moveToNext();
             }
         }
 
        // c.close();
+        /*Set set = smsMap.entrySet();
+        // Get an iterator
+        Iterator i = set.iterator();
+        // Display elements
+        while(i.hasNext()) {
+            Map.Entry me = (Map.Entry)i.next();
+            System.out.print(me.getKey() + ": ");
+            System.out.println(me.getValue());
+        }*/
 
         return lstSms;
     }
@@ -213,9 +269,27 @@ public class MainPage extends AppCompatActivity {
                 startActivityForResult(i3, 2);
 
                 return true;
+            case R.id.backup:
+                ArrayList<SMSDataSer>  smsBackup=new ArrayList<SMSDataSer>();
+                for(int k=0;k<smsList.size();k++)
+                {
+                    SMSDataSer s=new SMSDataSer(smsList.get(k));
+                    smsBackup.add(s);
+
+                }
+
+                Intent i5=new Intent(getApplicationContext(),BackupDrive.class);
+                i5.putExtra("backupdata", smsBackup);
+                startActivityForResult(i5, 2);
+                //startService();
+
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+    public void startService( ) {
+        startService(new Intent(getBaseContext(), BackupService.class));
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

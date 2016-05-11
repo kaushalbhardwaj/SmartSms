@@ -1,12 +1,21 @@
 package com.example.khome.smartsms;
 
+import java.io.Serializable;
+
 /**
  * Created by khome on 3/5/16.
  */
-public class SMSData {
+public class SMSDataSer implements Serializable{
     public String number;
     public String body;
     public String date;
+    public SMSDataSer(SMSData sms)
+    {
+        number=sms.getNumber();
+        body=sms.getBody();
+        date=sms.getDate();
+
+    }
 
     public String getNumber() {
         return number;

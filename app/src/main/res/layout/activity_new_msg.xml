@@ -74,7 +74,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="280dp"
                     android:id="@+id/body_layout"
-                    android:background="#c6c4c4"
+                    android:background="#BCAAA4"
                     android:layout_marginTop="70dp">
 
 
