@@ -6,6 +6,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -61,6 +62,7 @@ public class MainPage extends AppCompatActivity implements SearchView.OnQueryTex
         setContentView(R.layout.activity_main_page);
         cl=(CoordinatorLayout)findViewById(R.id.mainpagecl);
         smsMap=new LinkedHashMap<String,ArrayList<SMSData>>();
+
 
         newmsg=(FloatingActionButton)findViewById(R.id.newmsg);
 

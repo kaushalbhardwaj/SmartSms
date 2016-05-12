@@ -6,6 +6,11 @@ package com.example.khome.smartsms;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,12 +30,14 @@ public class MySimpleArrayAdapter extends ArrayAdapter {
     private final Context context;
 
     List<Map.Entry<String, ArrayList<SMSData>>> li;
+    public String color[]={"#009688","#FF9800","#8BC34A","#9C27B0","#2196F3","#8D6E63","#FF5722","#607D8B","#E91E63"};
 
     private static class ViewHolder {
         TextView msg;
         TextView phonetext;
         TextView date1;
         TextView num;
+        ImageView account;
     }
     public MySimpleArrayAdapter(Context context, List<Map.Entry<String, ArrayList<SMSData>>> li1) {
         super(context, R.layout.rowlayout_week, li1);
@@ -72,6 +79,7 @@ public class MySimpleArrayAdapter extends ArrayAdapter {
             viewHolder.phonetext = (TextView) convertView.findViewById(R.id.phonenum);
             viewHolder.date1 = (TextView) convertView.findViewById(R.id.date);
             viewHolder.num = (TextView) convertView.findViewById(R.id.num);
+            viewHolder.account=(ImageView)convertView.findViewById(R.id.account);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -80,6 +88,14 @@ public class MySimpleArrayAdapter extends ArrayAdapter {
         viewHolder.num.setText(num1);
         viewHolder.date1.setText(dat);
         viewHolder.phonetext.setText(phonenum);
+
+        Drawable tempDrawable = context.getResources().getDrawable(R.drawable.circle);
+        LayerDrawable bubble = (LayerDrawable) tempDrawable;
+        int c1=position%9;
+        GradientDrawable solidColor = (GradientDrawable) bubble.findDrawableByLayerId(R.id.shapeitem);
+        solidColor.setColor(Color.parseColor(color[c1]));
+        viewHolder.account.setImageDrawable(tempDrawable);
+
 
         /*View rowView = inflater.inflate(R.layout.rowlayout_week, parent, false);
         Random ran=new Random();
